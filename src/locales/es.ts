@@ -51,8 +51,10 @@ const app: I18nLocales = {
     a_enter_permissions: 'Seleccionar Permisos',
     a_enter_phone: 'Ingresar Teléfono',
     a_enter_slug: 'Ingresar Slug',
+    a_enter_title: 'Ingresar Título',
     a_enter_tax_condition: 'Ingresar condición fiscal',
     a_enter_type: 'Ingresar Tipo',
+    a_enter_price: 'Ingresar Precio',
     a_enter_value: 'Ingresar valor',
     a_es: 'Español',
     a_filter_by: 'Filtrar por',
@@ -85,6 +87,7 @@ const app: I18nLocales = {
     a_select_country: 'Seleccionar País',
     a_select_enable: 'Seleccionar el estado',
     a_select_roles: 'Seleccionar Roles',
+    a_select_category: 'Seleccionar Categoría',
     a_select: 'Seleccionar',
     a_send: 'Enviar',
     a_sign_up: '¡Registrate!',
@@ -106,8 +109,10 @@ const app: I18nLocales = {
 const auth: I18nLocales = {
     au_can_log_in_data: 'Ya puedes iniciar sesión con tus datos.',
     au_can_log_in_with: 'Podrás iniciar sesión con:',
-    au_check_your_box: 'Revisa tu casilla, te enviamos un correo con el link de activación de la cuenta.',
-    au_check_your_email_change_password: 'Por favor revise en su correo electrónico la bandeja de entrada, para proceder al cambio de contraseña y luego iniciar sesión.',
+    au_check_your_box:
+    'Revisa tu casilla, te enviamos un correo con el link de activación de la cuenta.',
+    au_check_your_email_change_password:
+    'Por favor revise en su correo electrónico la bandeja de entrada, para proceder al cambio de contraseña y luego iniciar sesión.',
     au_check_your_email: 'Revisa tu casilla, te enviamos un correo.',
     au_email_sent_successfully: '¡Email enviado con éxito!',
     au_forgot_password: '¿Olvidaste tu contraseña?',
@@ -133,23 +138,36 @@ const entities: I18nLocales = {
 };
 
 const errors: I18nLocales = {
-    'app.domain.exceptions.uniqueAttribute': 'Ya existe un registro con el mismo valor de `{field}`.',
-    'app.presentation.exceptions.duplicateEntity': 'Ya existe un registro con {field} {value}.',
-    'app.presentation.exceptions.referenceConstraint': 'Otro registro tiene una relación con este {field} {value}.',
-    'app.presentation.exceptions.routeNotFound': 'Hay un error con esta ruta en el servidor.',
-    'app.presentation.exceptions.validator': 'Los valores de los campos no son válidos.',
-    'auth.domain.exceptions.badCredentials': 'Correo electrónico o contraseña incorrectos.',
+    'app.domain.exceptions.uniqueAttribute':
+    'Ya existe un registro con el mismo valor de `{field}`.',
+    'app.presentation.exceptions.duplicateEntity':
+    'Ya existe un registro con {field} {value}.',
+    'app.presentation.exceptions.referenceConstraint':
+    'Otro registro tiene una relación con este {field} {value}.',
+    'app.presentation.exceptions.routeNotFound':
+    'Hay un error con esta ruta en el servidor.',
+    'app.presentation.exceptions.validator':
+    'Los valores de los campos no son válidos.',
+    'auth.domain.exceptions.badCredentials':
+    'Correo electrónico o contraseña incorrectos.',
     'err_404': 'La página solicitada no existe',
     'err_create_user': 'Error al crear el usuario',
-    'err_login_description': 'No se pudo iniciar sesión. Verifique su correo electrónico y contraseña o vuelva a intentar mas tarde.',
+    'err_login_description':
+    'No se pudo iniciar sesión. Verifique su correo electrónico y contraseña o vuelva a intentar mas tarde.',
     'err_login': 'Error al iniciar sesión',
     'err_process_role': 'Error al procesar roles',
     'err_process_user': 'Error al procesar usuarios',
+    'err_process_category': 'Error al procesar categorías',
+    'err_process_product': 'Error al procesar productos',
     'err_remove_role': 'Error al eliminar el rol',
     'err_remove_user': 'Error al eliminar el usuario',
+    'err_remove_product': 'Error al eliminar el producto',
+    'err_remove_category': 'Error al eliminar la categoría',
     'err_save_password': 'Error al guardar la contraseña',
     'err_save_role': 'Error al guardar el rol',
+    'err_save_category': 'Error al guardar la categoría',
     'err_save_user': 'Error al guardar el usuario',
+    'err_save_product': 'Error al guardar el producto',
     'err_save': 'Error al guardar',
     'err_server': 'Error del servidor',
     'err_view': 'Error al cargar la vista',
@@ -157,7 +175,8 @@ const errors: I18nLocales = {
     'Forbidden': 'Acceso denegado',
     'HTTP_BAD_REQUEST': 'Error en la petición',
     'HTTP_FORBIDDEN': 'Acceso denegado',
-    'HTTP_UNPROCESSABLE_ENTITY': 'El registro no cumple con las reglas de validación.',
+    'HTTP_UNPROCESSABLE_ENTITY':
+    'El registro no cumple con las reglas de validación.',
     'shared.exceptions.notFound': 'No se encuentra el recurso `{entity}`.',
     'Unprocessable Entity': 'Error al procesar los datos',
     'user.domain.exceptions.unverifiedUser': 'El usuario no ha sido verificado.',
@@ -202,11 +221,13 @@ const properties: I18nLocales = {
     percentage: 'Porcentaje',
     permissions: 'Permisos',
     phone: 'Teléfono',
+    price: 'Precio',
     roles: 'Roles',
     slug: 'Slug',
     string: 'cadena',
     tax_conditional: 'Condición fiscal',
     taxes: 'Impuestos',
+    title: 'Título',
     type_id: 'Tipo',
     type: 'Tipo',
     value: 'Valor',
@@ -240,6 +261,30 @@ const user: I18nLocales = {
     u_view: 'Ver Usuario',
 };
 
+const products: I18nLocales = {
+    p_products: 'Productos',
+    p_update: 'Editar Producto',
+    p_updated: 'Producto actualizado',
+    p_remove: '¿Está seguro que desea eliminar este producto?',
+    p_removed: 'Producto Eliminado',
+    p_list: 'Listado de Productos',
+    p_create: 'Crear Producto',
+    p_created: 'Producto creado',
+    p_no_products: 'No Productos',
+};
+
+const categories: I18nLocales = {
+    c_categories: 'Categorias',
+    c_update: 'Editar Categoría',
+    c_updated: 'Categoría actualizada',
+    c_create: 'Crear Categoría',
+    c_created: 'Categoría creada',
+    c_remove: '¿Está seguro que desea eliminar esta categoría?',
+    c_removed: 'Categoría Eliminada',
+    c_list: 'Listado de Categorías',
+    c_no_categories: 'No Categorías',
+};
+
 const es: I18nLocales = {
     ...app,
     ...appValidations,
@@ -249,6 +294,8 @@ const es: I18nLocales = {
     ...properties,
     ...roles,
     ...user,
+    ...products,
+    ...categories,
 };
 
 export default es;

@@ -1,9 +1,11 @@
-const API_PROTOCOL = import.meta.env.VITE_API_PROTOCOL as string || 'http';
-const API_HOSTNAME = import.meta.env.VITE_API_HOSTNAME as string || 'localhost';
-const API_PORT = import.meta.env.VITE_API_PORT as string || 8089;
-const VITE_API_WITH_CREDENTIALS = import.meta.env.VITE_API_WITH_CREDENTIALS === 'true' ?? false;
+const API_PROTOCOL = ( import.meta.env.VITE_API_PROTOCOL as string ) || 'http';
+const API_HOSTNAME =
+  ( import.meta.env.VITE_API_HOSTNAME as string ) || 'localhost';
+const API_PORT = ( import.meta.env.VITE_API_PORT as string ) || 8089;
+const VITE_API_WITH_CREDENTIALS =
+  import.meta.env.VITE_API_WITH_CREDENTIALS === 'true' ?? false;
 
-const BACKEND_BASE_PATH = import.meta.env.VITE_API_BASE as string || 'api';
+const BACKEND_BASE_PATH = ( import.meta.env.VITE_API_BASE as string ) || 'api';
 
 export const config = {
     apiGateway: {
@@ -41,6 +43,20 @@ export const config = {
                 create: `${BACKEND_BASE_PATH}/roles`,
                 update: `${BACKEND_BASE_PATH}/roles`,
                 remove: `${BACKEND_BASE_PATH}/roles`,
+            },
+            products: {
+                getAll: `${BACKEND_BASE_PATH}/products`,
+                getOne: `${BACKEND_BASE_PATH}/products`,
+                create: `${BACKEND_BASE_PATH}/products`,
+                update: `${BACKEND_BASE_PATH}/products`,
+                remove: `${BACKEND_BASE_PATH}/products`,
+            },
+            categories: {
+                getAll: `${BACKEND_BASE_PATH}/categories`,
+                getOne: `${BACKEND_BASE_PATH}/categories`,
+                create: `${BACKEND_BASE_PATH}/categories`,
+                update: `${BACKEND_BASE_PATH}/categories`,
+                remove: `${BACKEND_BASE_PATH}/categories`,
             },
         },
     },

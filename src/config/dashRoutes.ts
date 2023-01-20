@@ -1,13 +1,14 @@
-import { lazy } from 'solid-js';
+import IconCategories from '../atoms/Icons/Stroke/IconCategories';
 import IconDashboard from '../atoms/Icons/Stroke/IconDashboard';
 import IconHome from '../atoms/Icons/Stroke/IconHome';
 import IconPencilAlt from '../atoms/Icons/Stroke/IconPencilAlt';
 import IconPlus from '../atoms/Icons/Stroke/IconPlus';
+import IconProducts from '../atoms/Icons/Stroke/IconProducts';
 import IconRoles from '../atoms/Icons/Stroke/IconRoles';
 import IconUsers from '../atoms/Icons/Stroke/IconUsers';
 import IconViewList from '../atoms/Icons/Stroke/IconViewList';
+import { lazy } from 'solid-js';
 import { permissions } from './permissions';
-
 
 export const dashRoutes = [
     {
@@ -44,7 +45,9 @@ export const dashRoutes = [
     },
     {
         path: '/email-sent-successfully',
-        component: lazy( () => import( '../pages/auth/forgotPasswordEmailSentSuccessfully' ) ),
+        component: lazy(
+            () => import( '../pages/auth/forgotPasswordEmailSentSuccessfully' )
+        ),
         name: 'a_change_password',
         icon: IconPencilAlt,
         showItem: false,
@@ -88,8 +91,7 @@ export const dashRoutes = [
         icon: IconUsers,
         showItem: true,
         permission: permissions.USERS.LIST,
-        children:
-        [
+        children: [
             {
                 path: '/',
                 component: lazy( () => import( '../pages/users' ) ),
@@ -130,8 +132,7 @@ export const dashRoutes = [
         icon: IconRoles,
         showItem: true,
         permission: permissions.ROLES.LIST,
-        children:
-        [
+        children: [
             {
                 path: '/',
                 component: lazy( () => import( '../pages/roles' ) ),
@@ -155,6 +156,74 @@ export const dashRoutes = [
                 showItem: false,
                 icon: IconPencilAlt,
                 permission: permissions.ROLES.UPDATE,
+            },
+        ],
+    },
+    // CHECK
+    {
+        path: '/products',
+        name: 'p_products',
+        icon: IconProducts,
+        showItem: true,
+        permission: permissions.PRODUCTS.LIST,
+        children: [
+            {
+                path: '/',
+                component: lazy( () => import( '../pages/products' ) ),
+                name: 'a_list',
+                icon: IconViewList,
+                showItem: true,
+                permission: permissions.PRODUCTS.LIST,
+            },
+            {
+                path: '/create',
+                component: lazy( () => import( '../pages/products/create' ) ),
+                name: 'a_create',
+                icon: IconPlus,
+                showItem: true,
+                permission: permissions.PRODUCTS.SAVE,
+            },
+            {
+                path: '/:id/update',
+                component: lazy( () => import( '../pages/products/update' ) ),
+                name: 'p_update',
+                icon: IconPencilAlt,
+                showItem: false,
+                permission: permissions.PRODUCTS.UPDATE,
+            },
+        ],
+    },
+    // CHECK
+    {
+        path: '/categories',
+        name: 'c_categories',
+        icon: IconCategories,
+        showItem: true,
+        permission: permissions.CATEGORIES.LIST,
+        children: [
+            {
+                path: '/',
+                component: lazy( () => import( '../pages/categories' ) ),
+                name: 'a_list',
+                icon: IconViewList,
+                showItem: true,
+                permission: permissions.CATEGORIES.LIST,
+            },
+            {
+                path: '/create',
+                component: lazy( () => import( '../pages/categories/create' ) ),
+                name: 'a_create',
+                icon: IconPlus,
+                showItem: true,
+                permission: permissions.CATEGORIES.SAVE,
+            },
+            {
+                path: '/:id/update',
+                component: lazy( () => import( '../pages/categories/update' ) ),
+                name: 'c_update',
+                showItem: false,
+                icon: IconPencilAlt,
+                permission: permissions.CATEGORIES.UPDATE,
             },
         ],
     },

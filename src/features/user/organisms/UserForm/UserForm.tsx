@@ -1,5 +1,3 @@
-import { createForm } from '@felte/solid';
-import { validator } from '@felte/validator-yup';
 import {
     Button,
     FormControl,
@@ -22,24 +20,26 @@ import {
     SelectValue,
     Switch
 } from '@hope-ui/solid';
-import { Link } from 'solid-app-router';
+import { Component, For, Show, createMemo } from 'solid-js';
 import { Text, useI18n } from 'solid-i18n';
-import { Component, createMemo, For, Show } from 'solid-js';
-import { InferType } from 'yup';
+import { UserApi, UserPayload } from '../../interfaces';
 import { country, userDocumentTypeOptions } from '../../../../entities';
+
+import { InferType } from 'yup';
+import { Link } from 'solid-app-router';
 import { PermissionApi } from '../../../auth/interfaces/permission';
 import { RoleApi } from '../../../role/interfaces';
-import { UserApi, UserPayload } from '../../interfaces';
+import { createForm } from '@felte/solid';
+import styles from './UserForm.module.css';
 import userCreateValidationSchema from '../../validations/schemas/userCreateValidationSchema';
 import userUpdateValidationSchema from '../../validations/schemas/userUpdateValidationSchema';
-import styles from './UserForm.module.css';
+import { validator } from '@felte/validator-yup';
 
 enum RequiredPermission {
-    submit='submit'
+    submit = 'submit',
 }
 
-interface UserUpdateTemplateProps
-{
+interface UserUpdateTemplateProps {
     onError: ( error: unknown ) => void;
     onSubmit: ( data: UserPayload ) => Promise<void>;
     onSuccess: () => void;
@@ -54,9 +54,14 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
     const i18n = useI18n();
     const { t } = i18n;
 
-    const rolesSelected = createMemo( () => { return props.userSelected?.roles?.map( role => role.id ) || []; } );
+    const rolesSelected = createMemo( () =>
+    {
+        return props.userSelected?.roles?.map( ( role ) => role.id ) || [];
+    } );
 
-    const userSchema = props.userSelected?.id ? userUpdateValidationSchema : userCreateValidationSchema;
+    const userSchema = props.userSelected?.id
+        ? userUpdateValidationSchema
+        : userCreateValidationSchema;
     const {
         errors,
         form,
@@ -64,7 +69,7 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
         isValid,
         setFields,
         setTouched,
-        // @ts-ignore
+    // @ts-ignore
     } = createForm<InferType<typeof userSchema>>( {
         initialValues: {
             permissions: props.userSelected?.permissions || [],
@@ -75,15 +80,15 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
         extend: validator( { schema: userSchema } ),
         onSuccess: props.onSuccess,
         onError: props.onError,
-        onSubmit: values => props.onSubmit( values as UserPayload ),
+        onSubmit: ( values ) => props.onSubmit( values as UserPayload ),
     } );
 
-    const handleSelect = ( field: keyof InferType<typeof userSchema> ) => ( value: string[] ) =>
+    const handleSelect =
+    ( field: keyof InferType<typeof userSchema> ) => ( value: string[] ) =>
     {
         setFields( field, value );
         setTouched( field, true );
     };
-
 
     return (
         <form ref={form} class="form_flex">
@@ -92,33 +97,56 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
             </h2>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'firstName' )}>
-                    <FormLabel for="firstName"><Text message="first_name"/></FormLabel>
-                    <Input autofocus name="firstName" type="text" placeholder={t( 'a_enter_first_name' ) as string} value={props.userSelected?.firstName}/>
-                    <FormErrorMessage><Text message={errors( 'firstName' )[0]} /></FormErrorMessage>
+                    <FormLabel for="firstName">
+                        <Text message="first_name" />
+                    </FormLabel>
+                    <Input
+                        autofocus
+                        name="firstName"
+                        type="text"
+                        placeholder={t( 'a_enter_first_name' ) as string}
+                        value={props.userSelected?.firstName}
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'firstName' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'lastName' )}>
-                    <FormLabel for="lastName"><Text message="last_name"/></FormLabel>
-                    <Input name="lastName" type="text" placeholder={t( 'a_enter_last_name' ) as string} value={props.userSelected?.lastName}/>
-                    <FormErrorMessage><Text message={errors( 'lastName' )[0]} /></FormErrorMessage>
+                    <FormLabel for="lastName">
+                        <Text message="last_name" />
+                    </FormLabel>
+                    <Input
+                        name="lastName"
+                        type="text"
+                        placeholder={t( 'a_enter_last_name' ) as string}
+                        value={props.userSelected?.lastName}
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'lastName' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
 
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'documentType' )}>
-                    <FormLabel><Text message="documentType"/></FormLabel>
+                    <FormLabel>
+                        <Text message="documentType" />
+                    </FormLabel>
                     <div class="field_justify_between">
-                        <FormControl required invalid={!!errors( 'documentType' )} class="small">
+                        <FormControl
+                            required
+                            invalid={!!errors( 'documentType' )}
+                            class="small"
+                        >
                             <Select
                                 value={props.userSelected?.documentType}
                                 onChange={handleSelect( 'documentType' )}
                             >
-                                <SelectTrigger
-                                    onBlur={() => setTouched( 'documentType', true )}
-                                >
+                                <SelectTrigger onBlur={() => setTouched( 'documentType', true )}>
                                     <SelectPlaceholder>
-                                        <Text message="type_id"/>
+                                        <Text message="type_id" />
                                     </SelectPlaceholder>
                                     <SelectValue />
                                     <SelectIcon />
@@ -127,7 +155,7 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                                     <SelectListbox>
                                         <SelectOptGroup>
                                             <For each={userDocumentTypeOptions}>
-                                                {documentType => (
+                                                {( documentType ) => (
                                                     <SelectOption
                                                         value={documentType.value}
                                                         rounded="$none"
@@ -135,10 +163,12 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                                                         _active={{ bg: '$warning3', color: '$warning11' }}
                                                         _selected={{ bg: '$warning9', color: 'white' }}
                                                     >
-                                                        <SelectOptionText _groupSelected={{ fontWeight: '$medium' }}>
+                                                        <SelectOptionText
+                                                            _groupSelected={{ fontWeight: '$medium' }}
+                                                        >
                                                             {documentType.label}
                                                         </SelectOptionText>
-                                                        <SelectOptionIndicator/>
+                                                        <SelectOptionIndicator />
                                                     </SelectOption>
                                                 )}
                                             </For>
@@ -147,14 +177,32 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                                 </SelectContent>
                             </Select>
                             <div class="flex absolute">
-                                <FormErrorMessage><Text message={errors( 'documentType' ) && errors( 'documentType' )[0] || 'loading'} /></FormErrorMessage>
+                                <FormErrorMessage>
+                                    <Text
+                                        message={
+                                            ( errors( 'documentType' ) && errors( 'documentType' )![0] ) ||
+                      'loading'
+                                        }
+                                    />
+                                </FormErrorMessage>
                             </div>
                         </FormControl>
 
-                        <FormControl required invalid={!!errors( 'documentNumber' )} class="big">
-                            <Input name="documentNumber" type="text" placeholder={t( 'a_enter_id_number' ) as string} value={props.userSelected?.documentNumber}/>
+                        <FormControl
+                            required
+                            invalid={!!errors( 'documentNumber' )}
+                            class="big"
+                        >
+                            <Input
+                                name="documentNumber"
+                                type="text"
+                                placeholder={t( 'a_enter_id_number' ) as string}
+                                value={props.userSelected?.documentNumber}
+                            />
                             <div class="flex absolute">
-                                <FormErrorMessage><Text message={errors( 'documentNumber' )[0]} /></FormErrorMessage>
+                                <FormErrorMessage>
+                                    <Text message={errors( 'documentNumber' )![0]} />
+                                </FormErrorMessage>
                             </div>
                         </FormControl>
                     </div>
@@ -163,64 +211,110 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
 
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'gender' )}>
-                    <FormLabel for="gender"><Text message="gender"/></FormLabel>
+                    <FormLabel for="gender">
+                        <Text message="gender" />
+                    </FormLabel>
                     <RadioGroup defaultValue={props.userSelected?.gender}>
                         <div class="field_justify_between">
-                            <Radio name="gender" id="gender-f" value="fame">F</Radio>
-                            <Radio name="gender" id="gender-m" value="male">M</Radio>
-                            <Radio name="gender" id="gender-o" value="other"><Text message="a_gender_other"/></Radio>
+                            <Radio name="gender" id="gender-f" value="fame">
+                F
+                            </Radio>
+                            <Radio name="gender" id="gender-m" value="male">
+                M
+                            </Radio>
+                            <Radio name="gender" id="gender-o" value="other">
+                                <Text message="a_gender_other" />
+                            </Radio>
                         </div>
                     </RadioGroup>
-                    <FormErrorMessage><Text message={errors( 'gender' )[0]} /></FormErrorMessage>
+                    <FormErrorMessage>
+                        <Text message={errors( 'gender' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
 
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'birthday' )}>
-                    <FormLabel for="birthday"><Text message="birthday"/></FormLabel>
-                    <Input name="birthday" type="date" placeholder={t( 'a_choose_birthday' ) as string} value={props.userSelected?.birthday}/>
-                    <FormErrorMessage><Text message={errors( 'birthday' )[0]} /></FormErrorMessage>
+                    <FormLabel for="birthday">
+                        <Text message="birthday" />
+                    </FormLabel>
+                    <Input
+                        name="birthday"
+                        type="date"
+                        placeholder={t( 'a_choose_birthday' ) as string}
+                        value={props.userSelected?.birthday}
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'birthday' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'enable' )}>
-                    <FormLabel><Text message="enable"/></FormLabel>
-                    <Switch class="switch_position" name="enable" defaultChecked={props.userSelected?.id ? props.userSelected?.enable : true} />
-                    <FormErrorMessage><Text message={errors( 'enable' )[0]}/></FormErrorMessage>
+                    <FormLabel>
+                        <Text message="enable" />
+                    </FormLabel>
+                    <Switch
+                        class="switch_position"
+                        name="enable"
+                        defaultChecked={
+                            props.userSelected?.id ? props.userSelected?.enable : true
+                        }
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'enable' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'country' )}>
-                    <FormLabel><Text message="country"/></FormLabel>
+                    <FormLabel>
+                        <Text message="country" />
+                    </FormLabel>
                     <Select
                         value={props.userSelected?.country}
                         onChange={handleSelect( 'country' )}
                     >
-                        <SelectTrigger
-                            onBlur={() => setTouched( 'country', true )}
-                        >
+                        <SelectTrigger onBlur={() => setTouched( 'country', true )}>
                             <SelectPlaceholder>
-                                <Text message="a_select_country"/>
+                                <Text message="a_select_country" />
                             </SelectPlaceholder>
                             <SelectValue />
                             <SelectIcon />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectListbox>
-                                <For each={ country }>
-                                    {item => <SelectOption value={item.value}>{item.label}</SelectOption>}
+                                <For each={country}>
+                                    {( item ) => (
+                                        <SelectOption value={item.value}>{item.label}</SelectOption>
+                                    )}
                                 </For>
                             </SelectListbox>
                         </SelectContent>
                     </Select>
-                    <FormErrorMessage><Text message={errors( 'country' ) && errors( 'country' )[0] || 'loading'} /></FormErrorMessage>
+                    <FormErrorMessage>
+                        <Text
+                            message={
+                                ( errors( 'country' ) && errors( 'country' )![0] ) || 'loading'
+                            }
+                        />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'address' )}>
-                    <FormLabel for="address"><Text message="address"/></FormLabel>
-                    <Input name="address" type="text" placeholder={t( 'a_your_address' ) as string} value={props.userSelected?.address}/>
-                    <FormErrorMessage><Text message={errors( 'address' )[0]} /></FormErrorMessage>
+                    <FormLabel for="address">
+                        <Text message="address" />
+                    </FormLabel>
+                    <Input
+                        name="address"
+                        type="text"
+                        placeholder={t( 'a_your_address' ) as string}
+                        value={props.userSelected?.address}
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'address' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <h2 class="section_title_opaque border_bottom">
@@ -228,46 +322,81 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
             </h2>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'email' )}>
-                    <FormLabel for="email"><Text message="email"/></FormLabel>
-                    <Input name="email" type="text" placeholder={t( 'a_your_email' ) as string} value={props.userSelected?.email}/>
-                    <FormErrorMessage><Text message={errors( 'email' )[0]} /></FormErrorMessage>
+                    <FormLabel for="email">
+                        <Text message="email" />
+                    </FormLabel>
+                    <Input
+                        name="email"
+                        type="text"
+                        placeholder={t( 'a_your_email' ) as string}
+                        value={props.userSelected?.email}
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'email' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <div class="field_wrapper">
                 <FormControl required invalid={!!errors( 'phone' )}>
-                    <FormLabel for="phone"><Text message="phone"/></FormLabel>
-                    <Input name="phone" type="text" placeholder={t( 'a_enter_phone' ) as string} value={props.userSelected?.phone}/>
-                    <FormErrorMessage><Text message={errors( 'phone' )[0]} /></FormErrorMessage>
+                    <FormLabel for="phone">
+                        <Text message="phone" />
+                    </FormLabel>
+                    <Input
+                        name="phone"
+                        type="text"
+                        placeholder={t( 'a_enter_phone' ) as string}
+                        value={props.userSelected?.phone}
+                    />
+                    <FormErrorMessage>
+                        <Text message={errors( 'phone' )![0]} />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <Show when={!props.userSelected?.id}>
                 <div class="field_wrapper full">
                     <FormControl required invalid={!!errors( 'password' )}>
-                        <FormLabel for="password"><Text message="password"/></FormLabel>
-                        <Input name="password" type="password" placeholder={t( 'a_your_password' ) as string} />
-                        <FormErrorMessage><Text message={errors( 'password' )[0]} /></FormErrorMessage>
+                        <FormLabel for="password">
+                            <Text message="password" />
+                        </FormLabel>
+                        <Input
+                            name="password"
+                            type="password"
+                            placeholder={t( 'a_your_password' ) as string}
+                        />
+                        <FormErrorMessage>
+                            <Text message={errors( 'password' )![0]} />
+                        </FormErrorMessage>
                     </FormControl>
                 </div>
                 <div class="field_wrapper full">
                     <FormControl required invalid={!!errors( 'passwordConfirmation' )}>
-                        <FormLabel for="passwordConfirmation"><Text message="confirm_password"/></FormLabel>
-                        <Input name="passwordConfirmation" type="password" placeholder={t( 'a_repeat_password' ) as string}/>
-                        <FormErrorMessage><Text message={errors( 'passwordConfirmation' )[0]} /></FormErrorMessage>
+                        <FormLabel for="passwordConfirmation">
+                            <Text message="confirm_password" />
+                        </FormLabel>
+                        <Input
+                            name="passwordConfirmation"
+                            type="password"
+                            placeholder={t( 'a_repeat_password' ) as string}
+                        />
+                        <FormErrorMessage>
+                            <Text message={errors( 'passwordConfirmation' )![0]} />
+                        </FormErrorMessage>
                     </FormControl>
                 </div>
             </Show>
             <div class="field_wrapper">
                 <FormControl id="permissions" invalid={!!errors( 'permissions' )}>
-                    <FormLabel for="permissions"><Text message="permissions"/></FormLabel>
-                    <Select multiple
+                    <FormLabel for="permissions">
+                        <Text message="permissions" />
+                    </FormLabel>
+                    <Select
+                        multiple
                         value={props.userSelected?.permissions}
                         onChange={handleSelect( 'permissions' )}
                     >
-                        <SelectTrigger
-                            onBlur={() => setTouched( 'permissions', true )}
-                        >
+                        <SelectTrigger onBlur={() => setTouched( 'permissions', true )}>
                             <SelectPlaceholder>
-                                <Text message="a_enter_permissions"/>
+                                <Text message="a_enter_permissions" />
                             </SelectPlaceholder>
                             <SelectValue />
                             <SelectIcon />
@@ -276,11 +405,11 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                             <SelectListbox>
                                 <SelectOptGroup>
                                     <For each={props.permissionsList}>
-                                        {permissionGroup => (
+                                        {( permissionGroup ) => (
                                             <>
                                                 <SelectLabel>{permissionGroup.group}</SelectLabel>
                                                 <For each={permissionGroup.permissions}>
-                                                    {permission => (
+                                                    {( permission ) => (
                                                         <SelectOption
                                                             value={permission}
                                                             rounded="$none"
@@ -288,10 +417,12 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                                                             _active={{ bg: '$warning3', color: '$warning11' }}
                                                             _selected={{ bg: '$warning9', color: 'white' }}
                                                         >
-                                                            <SelectOptionText _groupSelected={{ fontWeight: '$medium' }}>
+                                                            <SelectOptionText
+                                                                _groupSelected={{ fontWeight: '$medium' }}
+                                                            >
                                                                 {permission}
                                                             </SelectOptionText>
-                                                            <SelectOptionIndicator/>
+                                                            <SelectOptionIndicator />
                                                         </SelectOption>
                                                     )}
                                                 </For>
@@ -302,21 +433,29 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                             </SelectListbox>
                         </SelectContent>
                     </Select>
-                    <FormErrorMessage><Text message={errors( 'permissions' ) && errors( 'permissions' )[0] || 'loading'} /></FormErrorMessage>
+                    <FormErrorMessage>
+                        <Text
+                            message={
+                                ( errors( 'permissions' ) && errors( 'permissions' )![0] ) ||
+                'loading'
+                            }
+                        />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
             <div class="field_wrapper">
                 <FormControl id="roles" invalid={!!errors( 'roles' )}>
-                    <FormLabel for="roles"><Text message="roles"/></FormLabel>
-                    <Select multiple
+                    <FormLabel for="roles">
+                        <Text message="roles" />
+                    </FormLabel>
+                    <Select
+                        multiple
                         value={rolesSelected()}
                         onChange={handleSelect( 'roles' )}
                     >
-                        <SelectTrigger
-                            onBlur={() => setTouched( 'roles', true )}
-                        >
+                        <SelectTrigger onBlur={() => setTouched( 'roles', true )}>
                             <SelectPlaceholder>
-                                <Text message="a_select_roles"/>
+                                <Text message="a_select_roles" />
                             </SelectPlaceholder>
                             <SelectValue />
                             <SelectIcon />
@@ -325,7 +464,7 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                             <SelectListbox>
                                 <SelectOptGroup>
                                     <For each={props.rolesList}>
-                                        {rol => (
+                                        {( rol ) => (
                                             <SelectOption
                                                 value={rol.id}
                                                 rounded="$none"
@@ -333,10 +472,12 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                                                 _active={{ bg: '$warning3', color: '$warning11' }}
                                                 _selected={{ bg: '$warning9', color: 'white' }}
                                             >
-                                                <SelectOptionText _groupSelected={{ fontWeight: '$medium' }}>
+                                                <SelectOptionText
+                                                    _groupSelected={{ fontWeight: '$medium' }}
+                                                >
                                                     {rol.name}
                                                 </SelectOptionText>
-                                                <SelectOptionIndicator/>
+                                                <SelectOptionIndicator />
                                             </SelectOption>
                                         )}
                                     </For>
@@ -344,18 +485,36 @@ const UserForm: Component<UserUpdateTemplateProps> = ( props ) =>
                             </SelectListbox>
                         </SelectContent>
                     </Select>
-                    <FormErrorMessage><Text message={errors( 'roles' ) && errors( 'roles' )[0] || 'loading'} /></FormErrorMessage>
+                    <FormErrorMessage>
+                        <Text
+                            message={( errors( 'roles' ) && errors( 'roles' )![0] ) || 'loading'}
+                        />
+                    </FormErrorMessage>
                 </FormControl>
             </div>
-            <div class="update_save_buttons_container" data-parent={props.requiredPermission.submit}>
+            <div
+                class="update_save_buttons_container"
+                data-parent={props.requiredPermission.submit}
+            >
                 <div class="button_full has-permission">
-                    <Button class="button_full" as={Link} href="/users" colorScheme="neutral">
+                    <Button
+                        class="button_full"
+                        as={Link}
+                        href="/users"
+                        colorScheme="neutral"
+                    >
                         <Text message="a_close" />
                     </Button>
                 </div>
                 <div class="button_full has-permission">
-                    <Button class="button_full" type="submit" disabled={!isValid()} loading={isSubmitting()} loadingText={<Text message="a_submitting"/> as string}>
-                        <Text message="a_save"/>
+                    <Button
+                        class="button_full"
+                        type="submit"
+                        disabled={!isValid()}
+                        loading={isSubmitting()}
+                        loadingText={( <Text message="a_submitting" /> ) as string}
+                    >
+                        <Text message="a_save" />
                     </Button>
                 </div>
                 <div class="button_full fallback">

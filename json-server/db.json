@@ -99,6 +99,26 @@
         "usersChangeMyPassword",
         "usersChangeUserPassword"
       ]
+    },
+    {
+      "group": "CATEGORIES",
+      "permissions": [
+        "categoriesSave",
+        "categoriesUpdate",
+        "categoriesShow",
+        "categoriesList",
+        "categoriesDelete"
+      ]
+    },
+    {
+      "group": "PRODUCTS",
+      "permissions": [
+        "productsSave",
+        "productsUpdate",
+        "productsShow",
+        "productsList",
+        "productsDelete"
+      ]
     }
   ],
   "roles": [
@@ -128,6 +148,27 @@
       "slug": "admin",
       "enable": true,
       "id": "FotmTfY"
+    }
+  ],
+  "categories": [
+    {
+      "title": "Food",
+      "enable": true,
+      "id": 1
+    },
+    {
+      "title": "Clothes",
+      "enable": false,
+      "id": 2
+    }
+  ],
+  "products": [
+    {
+      "title": "Sugar",
+      "price": 200,
+      "enable": true,
+      "category": "Food",
+      "id": 2
     }
   ],
   "refresh-token": {

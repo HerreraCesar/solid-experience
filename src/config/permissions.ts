@@ -34,4 +34,20 @@ export const permissions = {
         UPDATE: 'filesUpdate',
         DOWNLOAD: 'filesDownload',
     },
+    // CHECK
+    PRODUCTS: {
+        LIST: 'productsList',
+        SAVE: 'productsSave',
+        UPDATE: 'productsUpdate',
+        SHOW: 'productsShow',
+        DELETE: 'productsDelete',
+    },
+    // CHECK
+    CATEGORIES: {
+        LIST: 'categoriesList',
+        SAVE: 'categoriesSave',
+        UPDATE: 'categoriesUpdate',
+        SHOW: 'categoriesShow',
+        DELETE: 'categoriesDelete',
+    },
 };
